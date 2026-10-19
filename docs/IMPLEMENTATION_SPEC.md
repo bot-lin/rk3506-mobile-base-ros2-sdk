@@ -133,11 +133,11 @@ The glossary and four accepted ADRs are the domain and architecture references
 for this feature. The final separate-repository instruction supersedes the
 earlier suggestion to place the SDK inside the Controller repository.
 
-The SDK repository currently contains design documentation only. No driver
-implementation, platform-matrix validation or physical acceptance has been
-completed. Remote control depends on the accompanying Controller access and
-ownership changes; subscribing to telemetry alone does not make the deployed
-Controller remotely controllable.
+At specification drafting, the SDK repository contained design documentation
+only. See [validation](VALIDATION.md) for current implementation and platform
+results; physical acceptance remains outstanding. Remote control depends on
+the accompanying Controller access and ownership changes; subscribing to
+telemetry alone does not make the deployed Controller remotely controllable.
 
 Track this specification in GitHub Issues for
 `bot-lin/rk3506-mobile-base-ros2-sdk`, using the configured `ready-for-agent`

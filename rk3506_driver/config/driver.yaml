@@ -1,0 +1,19 @@
+/**:
+  ros__parameters:
+    robot_ip: "192.168.50.1"
+    base_port: 5003
+    battery_port: 5001
+    di_port: 5002
+    command_timeout: 0.3
+    base_timeout: 0.5
+    battery_timeout: 6.0
+    di_timeout: 1.0
+    max_linear_velocity: 1.0
+    max_angular_velocity: 1.0
+    use_stamped_cmd_vel: false
+    publish_tf: false
+    odom_frame: "odom"
+    base_frame: "base_link"
+    # Uncalibrated diagonal covariance: x, y, z, roll, pitch, yaw.
+    pose_covariance: [0.1, 0.1, 1000000.0, 1000000.0, 1000000.0, 0.2]
+    twist_covariance: [0.1, 0.1, 1000000.0, 1000000.0, 1000000.0, 0.2]

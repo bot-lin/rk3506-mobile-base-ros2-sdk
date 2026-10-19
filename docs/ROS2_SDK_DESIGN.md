@@ -2,8 +2,9 @@
 
 The user accepted these design decisions on 2026-10-19, including the final
 failure-handling and telemetry defaults, and subsequently requested a separate
-repository named `rk3506-mobile-base-ros2-sdk`. Repository setup is complete;
-driver implementation, deployment and hardware acceptance have not started.
+repository named `rk3506-mobile-base-ros2-sdk`. The driver is implemented;
+see [validation](VALIDATION.md) for executed checks. Deployment and supervised
+hardware acceptance remain outstanding.
 
 ## Scope and platform support
 

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>rk3506_driver</name>
+  <version>0.1.0</version>
+  <description>ROS 2 UDP bridge for the RK3506 Helishi mobile-base controller.</description>
+  <maintainer email="bot-lin@users.noreply.github.com">bot-lin</maintainer>
+  <license>UNLICENSED</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>rcl_interfaces</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>diagnostic_msgs</depend>
+  <depend>tf2_ros</depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <test_depend>tf2_msgs</test_depend>
+  <test_depend>ament_cmake_pytest</test_depend>
+  <test_depend>rclpy</test_depend>
+  <test_depend>python3-pytest</test_depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>
