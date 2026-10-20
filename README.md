@@ -151,6 +151,76 @@ Software stop is latched. Stop the velocity publisher and clear it explicitly
 through the existing web UI. DI1/DI2 retain motor-enable authority; the SDK never
 clears a stop or fault automatically.
 
+## Web UI
+
+The controller provides a Web UI for status monitoring, manual driving and
+settings. It runs on the RK3506 as `robot-web`; launching the ROS node does not
+start the Web UI.
+
+### Open the console
+
+1. Connect your computer or phone to the controller's LAN, access point or
+   configured ZeroTier network.
+2. Open `http://<controller-ip>:8080/`. When connected to the controller's
+   access point, the default address is `http://192.168.50.1:8080/`.
+   Use the configured port if `WEB_PORT` was changed.
+3. Select **中文 / English** in the page header. New browsers default to Chinese;
+   the language choice is remembered locally.
+
+Viewing status does not acquire velocity ownership. Check the base state,
+wheel odometry, battery, DI1–DI8, motor feedback and system health before
+operating. Unavailable/stale readings are hidden. Steering/drive targets in the
+base overview are distinct from measured values in the motor panel.
+
+### Manual driving and return to ROS
+
+Complete the [robot checklist](docs/ROBOT_CHECKLIST.md) before physical motion.
+
+1. Wait for fresh feedback and a ready controller. Driving requires DI1 released
+   and DI2 ON; the Web UI does not replace these hardware inputs or provide
+   Arm/Disarm buttons.
+2. Select **Take control**. With the companion handoff update installed, this
+   stops ROS motion and gives the browser velocity ownership. ROS commands
+   received during browser control are discarded.
+3. Hold a direction button or **W/A/S/D** to drive. **Q/E** select forward
+   diagonals, **Z/C** backward diagonals, and **1/2** rotate left/right.
+   Releasing the button or key clears the held movement command.
+4. **STOP** or **Space** latches a software motion stop. Stop ROS velocity
+   publishers, resolve any fault cause, then select **Clear stop / fault**
+   explicitly when ready to recover. Motor modes continue to follow DI1/DI2.
+5. Stop held manual commands and select **Release** to return velocity ownership.
+   ROS can resume automatically on the next new command. Stop the ROS publisher
+   before releasing control if no further navigation is intended.
+
+Web speed sliders apply to manual commands. Configure ROS command limits with
+the SDK's `max_linear_velocity` and `max_angular_velocity` parameters.
+
+### Motion settings
+
+On supported controller versions, **Motion limits** shows current X/Y/yaw
+acceleration and deceleration, plus the shared steering-motor speed limit.
+Take control, stop the base and wait for valid stationary feedback before
+editing and selecting **Save and apply**. DI2 does not need to be OFF.
+
+Enter positive acceleration/deceleration magnitudes: X/Y use m/s² and yaw uses
+rad/s². Steering speed is motor-shaft RPM, separate from chassis yaw velocity.
+Saved settings persist in the controller configuration across restarts;
+acceleration/deceleration shape both browser and ROS commands without restarting
+the SDK. **Use current values** discards unsaved edits. If a save times out,
+refresh the active values before retrying; if steering speed is saved but not
+confirmed, check and resolve the reported controller fault before clearing it.
+
+### Wi-Fi and access point
+
+Use **Network settings** to scan/connect/save Wi-Fi networks and configure the
+controller's access-point SSID, password and channel. DI2 does not need to be OFF;
+changes are blocked while another browser owns control.
+
+Stop velocity publishers before changing connectivity. Network changes may
+disconnect the page and ROS UDP traffic. Reconnect using the controller's new
+address if it changed, update `robot_ip` and restart the SDK. If the upper
+computer's source IP changed, also update the controller's `NAVIGATION_PEER`.
+
 ## Browser control and reconnection
 
 Browser control takes priority. ROS messages during browser control are discarded;
