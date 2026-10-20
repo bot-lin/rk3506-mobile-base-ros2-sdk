@@ -157,7 +157,10 @@ The controller provides a Web UI for status monitoring, manual driving and
 settings. It runs on the RK3506 as `robot-web`; launching the ROS node does not
 start the Web UI.
 
-### Open the console
+The following walkthrough uses the actual console with simulated telemetry.
+Numbers mark the controls to use; displayed values are examples.
+
+### 1. Open the console and check readiness
 
 1. Connect your computer or phone to the controller's LAN, access point or
    configured ZeroTier network.
@@ -167,40 +170,86 @@ start the Web UI.
 3. Select **中文 / English** in the page header. New browsers default to Chinese;
    the language choice is remembered locally.
 
+![Console overview: language, connection, input readiness and Take control](docs/images/web-ui/overview-en.png)
+
+| Callout | What to check or click |
+| --- | --- |
+| **1** | Choose the interface language. |
+| **2** | Confirm **Robot connected · live**. |
+| **3** | Confirm **Inputs ready** and valid feedback before driving. |
+| **4** | Click **Take control** to start a manual session. |
+
 Viewing status does not acquire velocity ownership. Check the base state,
 wheel odometry, battery, DI1–DI8, motor feedback and system health before
 operating. Unavailable/stale readings are hidden. Steering/drive targets in the
 base overview are distinct from measured values in the motor panel.
 
-### Manual driving and return to ROS
+### 2. Take control and drive
 
 Complete the [robot checklist](docs/ROBOT_CHECKLIST.md) before physical motion.
+Driving requires DI1 released, DI2 ON and fresh feedback; there are no web
+Arm/Disarm buttons.
 
-1. Wait for fresh feedback and a ready controller. Driving requires DI1 released
-   and DI2 ON; the Web UI does not replace these hardware inputs or provide
-   Arm/Disarm buttons.
-2. Select **Take control**. With the companion handoff update installed, this
-   stops ROS motion and gives the browser velocity ownership. ROS commands
-   received during browser control are discarded.
-3. Hold a direction button or **W/A/S/D** to drive. **Q/E** select forward
-   diagonals, **Z/C** backward diagonals, and **1/2** rotate left/right.
-   Releasing the button or key clears the held movement command.
-4. **STOP** or **Space** latches a software motion stop. Stop ROS velocity
-   publishers, resolve any fault cause, then select **Clear stop / fault**
-   explicitly when ready to recover. Motor modes continue to follow DI1/DI2.
-5. Stop held manual commands and select **Release** to return velocity ownership.
-   ROS can resume automatically on the next new command. Stop the ROS publisher
-   before releasing control if no further navigation is intended.
+Click **Take control** in the overview above. With the companion handoff update
+installed, this stops ROS motion and discards ROS commands while the browser
+owns control. The panel then looks like this:
+
+![Manual driving panel after taking control, with numbered controls](docs/images/web-ui/drive-en.png)
+
+| Callout | Action |
+| --- | --- |
+| **1** | Wait for **You have control** and enabled direction buttons. |
+| **2** | Set the linear and turn-speed sliders to suitable low values. |
+| **3** | **Hold** a direction button to move; release it to clear the movement command. |
+| **4** | Click **STOP**, or press **Space**, to latch a software motion stop. |
+| **5** | Click **Release** when the manual session is finished. |
+
+Keyboard controls work while the page is focused and you are not editing a form:
+
+| Keys | Movement while held |
+| --- | --- |
+| **W / S** | Forward / backward |
+| **A / D** | Left / right translation |
+| **Q / E** | Forward-left / forward-right diagonal |
+| **Z / C** | Backward-left / backward-right diagonal |
+| **1 / 2** | Rotate left / right |
 
 Web speed sliders apply to manual commands. Configure ROS command limits with
 the SDK's `max_linear_velocity` and `max_angular_velocity` parameters.
 
-### Motion settings
+### 3. Stop, recover and return to ROS
+
+After **STOP**, direction buttons are disabled and the gate explains why:
+
+![Software stop latched: gate message, Clear stop/fault and Release](docs/images/web-ui/stop-en.png)
+
+| Callout | Action |
+| --- | --- |
+| **1** | Read the stop/fault message. Software STOP remains latched after releasing the button. |
+| **2** | Stop ROS velocity publishers, resolve any fault cause, then click **Clear stop / fault** explicitly when ready. |
+| **3** | Click **Release** to end browser ownership. ROS resumes only on a new command when the controller is ready. |
+
+If STOP remains latched, ROS motion remains inhibited after release. Once the
+stop is cleared, a still-running ROS publisher can resume immediately after
+browser release. Keep it stopped if no further navigation is intended.
+Motor modes continue to follow DI1/DI2 throughout.
+
+### 4. Save motion settings
 
 On supported controller versions, **Motion limits** shows current X/Y/yaw
 acceleration and deceleration, plus the shared steering-motor speed limit.
 Take control, stop the base and wait for valid stationary feedback before
 editing and selecting **Save and apply**. DI2 does not need to be OFF.
+
+![Motion limits: current value, editable limit, steering RPM and save/reset buttons](docs/images/web-ui/motion-en.png)
+
+| Callout | Action |
+| --- | --- |
+| **1** | Read the controller's current value above each input. |
+| **2** | Edit the desired acceleration/deceleration magnitudes. |
+| **3** | Set the shared steering-motor RPM limit if supported. |
+| **4** | Click **Save and apply**, then wait for **Saved and applied. Settings survive restarts.** |
+| **5** | Use **Use current values** to discard an unsaved draft. |
 
 Enter positive acceleration/deceleration magnitudes: X/Y use m/s² and yaw uses
 rad/s². Steering speed is motor-shaft RPM, separate from chassis yaw velocity.
@@ -210,11 +259,24 @@ the SDK. **Use current values** discards unsaved edits. If a save times out,
 refresh the active values before retrying; if steering speed is saved but not
 confirmed, check and resolve the reported controller fault before clearing it.
 
-### Wi-Fi and access point
+### 5. Configure Wi-Fi or the access point
 
 Use **Network settings** to scan/connect/save Wi-Fi networks and configure the
 controller's access-point SSID, password and channel. DI2 does not need to be OFF;
 changes are blocked while another browser owns control.
+
+![Network settings: scan, select Wi-Fi, connect and save, AP name and save AP settings](docs/images/web-ui/network-en.png)
+
+| Callout | Action |
+| --- | --- |
+| **1** | Click **Scan networks**. |
+| **2** | Choose a nearby network, or enter its SSID manually; enter the Wi-Fi password below. |
+| **3** | Click **Connect and save** and wait for the displayed connection/IP to update. |
+| **4** | To change the device hotspot, edit its name, password and channel on the right. |
+| **5** | Click **Save AP settings**, then reconnect hotspot clients if necessary. |
+
+Leave the AP password blank to keep it unchanged. Renaming the AP requires
+entering a password again. Saved networks can be selected through **Connect saved**.
 
 Stop velocity publishers before changing connectivity. Network changes may
 disconnect the page and ROS UDP traffic. Reconnect using the controller's new
