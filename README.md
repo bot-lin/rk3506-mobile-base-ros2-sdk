@@ -162,8 +162,7 @@ Numbers mark the controls to use; displayed values are examples.
 
 ### 1. Open the console and check readiness
 
-1. Connect your computer or phone to the controller's LAN, access point or
-   configured ZeroTier network.
+1. Connect your computer or phone to the controller's LAN or access point.
 2. Open `http://<controller-ip>:8080/`. When connected to the controller's
    access point, the default address is `http://192.168.50.1:8080/`.
    Use the configured port if `WEB_PORT` was changed.
